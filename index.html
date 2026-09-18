@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17161b">
+  <title>LEGO Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div><strong>LEGO Control</strong><small>Smart layout</small></div>
+      </div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-page="railway"><span class="nav-icon" data-icon="train"></span><span>Railway</span><small>1 active</small></button>
+        <button class="nav-item" data-page="lighting"><span class="nav-icon" data-icon="bulb"></span><span>Lighting</span><small>1 on</small></button>
+        <button class="nav-item" data-page="switches"><span class="nav-icon" data-icon="switch"></span><span>Switches</span><small>2 points</small></button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="controller"><span class="status-dot"></span><div><strong>Controller online</strong><small>Raspberry Pi · 24 ms</small></div></div>
+        <button class="reset-button" id="reset-button"><span>↻</span> Reset demo</button>
+      </div>
+    </aside>
+
+    <section class="workspace">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <div><p class="eyebrow">MY LEGO CITY</p><h1 id="page-title">Railway</h1><p id="page-subtitle">1 of 3 lines connected</p></div>
+        <div class="online-pill"><span class="status-dot"></span><span>System online</span></div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="railway" aria-labelledby="page-title">
+          <div class="section-heading"><div><h2>Train lines</h2><p>Control speed and direction across your layout.</p></div><button class="secondary-button" data-demo-action="line">＋ Add line</button></div>
+          <div class="rail-grid">
+            <article class="card train-card">
+              <div class="card-top"><div class="title-group"><span class="number-badge">1</span><div><h3>Outer Loop</h3><p>Line 1 · Hub A</p></div></div><span class="state-badge running" id="train-state"><span></span>Running</span></div>
+              <div class="metric-row"><span>Speed</span><strong id="speed-output">62%</strong></div>
+              <input class="range" id="speed" type="range" min="0" max="100" value="62" aria-label="Outer Loop speed">
+              <div class="train-controls"><div class="segmented" id="direction"><button class="active" data-direction="Forward">Forward</button><button data-direction="Reverse">Reverse</button></div><button class="stop-button" id="stop" aria-label="Emergency stop"><span>■</span> Stop</button></div>
+            </article>
+            <article class="card overview-card">
+              <div><p class="eyebrow">LIVE OVERVIEW</p><h3>Layout activity</h3></div>
+              <div class="track-map" aria-label="Stylised railway activity map"><svg viewBox="0 0 400 190" role="img"><path class="track inactive" d="M42 95 C42 35 110 24 197 24s161 16 161 71-73 70-161 70S42 153 42 95Z"/><path class="track active-track" d="M42 95 C42 35 110 24 197 24s161 16 161 71"/><path class="siding" d="M145 164l-35-47"/><circle cx="42" cy="95" r="6"/><circle cx="358" cy="95" r="6"/><g class="train-dot"><circle cx="200" cy="24" r="11"/><path d="M195 24h10M198 20v8M202 20v8"/></g></svg></div>
+              <div class="overview-stats"><div><strong id="stat-speed">62%</strong><span>Speed</span></div><div><strong id="stat-direction">Forward</strong><span>Direction</span></div><div><strong>12.4 V</strong><span>Track power</span></div></div>
+            </article>
+          </div>
+          <div class="notice"><span>i</span><div><strong>Two line slots available</strong><p>Connect another hub to control up to three lines independently.</p></div><button data-demo-action="hub">Connect hub</button></div>
+        </section>
+
+        <section class="page" id="lighting" aria-labelledby="page-title">
+          <div class="section-heading"><div><h2>Lighting circuits</h2><p>Set the mood across your railway scene.</p></div><button class="secondary-button" data-demo-action="circuit">＋ Add circuit</button></div>
+          <div class="lighting-grid">
+            <article class="card lighting-card" data-light="station"><div class="card-top"><div class="title-group"><span class="icon-tile bulb-icon"></span><div><h3>Station Lights</h3><p>GPIO 17 · Platform</p></div></div><button class="toggle on" role="switch" aria-checked="true" aria-label="Station Lights"><span></span></button></div><div class="metric-row"><span>Brightness</span><strong class="brightness-output">70%</strong></div><input class="range brightness" type="range" min="0" max="100" value="70" aria-label="Station Lights brightness"></article>
+            <article class="card lighting-card disabled" data-light="trackside"><div class="card-top"><div class="title-group"><span class="icon-tile bulb-icon"></span><div><h3>Trackside Lamps</h3><p>GPIO 27 · Outer Loop</p></div></div><button class="toggle" role="switch" aria-checked="false" aria-label="Trackside Lamps"><span></span></button></div><div class="metric-row"><span>Brightness</span><strong class="brightness-output">Off</strong></div><input class="range brightness" type="range" min="0" max="100" value="40" aria-label="Trackside Lamps brightness" disabled></article>
+          </div>
+        </section>
+
+        <section class="page" id="switches" aria-labelledby="page-title">
+          <div class="section-heading"><div><h2>Track points</h2><p>Route trains safely through junctions.</p></div><button class="secondary-button" data-demo-action="switch">＋ Add switch</button></div>
+          <div class="switch-grid">
+            <article class="card point-card"><div class="card-top"><div><h3>Points 1</h3><p>Yard Entry · GPIO 22</p></div><span class="state-badge route-state">Straight</span></div><div class="point-diagram straight"><svg viewBox="0 0 300 100"><path class="rail base" d="M12 70h276"/><path class="rail branch" d="M135 70l110-58"/><circle cx="135" cy="70" r="7"/></svg></div><div class="segmented point-control"><button class="active" data-route="Straight">Straight</button><button data-route="Diverge">Diverge</button></div></article>
+            <article class="card point-card"><div class="card-top"><div><h3>Points 2</h3><p>Siding · GPIO 23</p></div><span class="state-badge route-state">Diverge</span></div><div class="point-diagram diverge"><svg viewBox="0 0 300 100"><path class="rail base" d="M12 70h276"/><path class="rail branch" d="M135 70l110-58"/><circle cx="135" cy="70" r="7"/></svg></div><div class="segmented point-control"><button data-route="Straight">Straight</button><button class="active" data-route="Diverge">Diverge</button></div></article>
+          </div>
+        </section>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
